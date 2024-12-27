@@ -1,39 +1,41 @@
-# Blog API Backend
+# Semantic Blog API Backend
 
-A REST API backend for a web blog built with FastAPI, SQLAlchemy, and ChromaDB. This API allows users to create, read, update, and delete blog posts while storing user data in SQLite and blog content in a vector database (ChromaDB).
+A REST API backend for a semantic web blog.
 
-## Features
+## Getting Started
 
-- User authentication and management
-- CRUD operations for blog posts
-- Vector-based content storage using ChromaDB
-- SQLite database for user management
-- FastAPI-powered REST API
+To run the application, you need to have Python 3.10 or later installed. Next, install the dependencies:
 
-## Project Structure
-
-## Development
-
-To run tests:
-```
-pytest
+```bash
+pip install -r requirements.txt
 ```
 
-## Sample Data
-
-To populate the database with sample data:
+If you want to use sample data, you can populate the database with sample data:
 ```bash
 python scripts/populate_db.py
 ```
 
-This will create:
-- 3 users with secure passwords
-- 2 blog posts per user
-- Vector embeddings for semantic search
+To run the application backend:
+```bash
+uvicorn app.main:app --reload
+```
 
-Sample users:
-1. john_doe@example.com / Test123!@#
-2. jane_smith@example.com / Test123!@#
-3. bob_wilson@example.com / Test123!@#
+## API Usage
 
-## License
+To use the API, you can use the following endpoints:
+
+- `POST /api/v1/users/`: Create a new user.
+- `GET /api/v1/users/`: Get all users.
+- `GET /api/v1/users/{user_id}`: Get a user by ID.
+- `PUT /api/v1/users/{user_id}`: Update a user by ID.
+- `DELETE /api/v1/users/{user_id}`: Delete a user by ID.
+- `POST /api/v1/posts/`: Create a new post.
+- `GET /api/v1/posts/`: Get all posts.
+- `GET /api/v1/posts/{post_id}`: Get a post by ID.
+- `PUT /api/v1/posts/{post_id}`: Update a post by ID.
+- `DELETE /api/v1/posts/{post_id}`: Delete a post by ID.
+- `POST /api/v1/posts/search/`: Search for posts.
+
+## Frontend
+
+TBC
