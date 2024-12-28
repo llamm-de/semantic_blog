@@ -45,7 +45,8 @@ def get_posts(
     limit: int = 10,
     db: Session = Depends(get_db)
 ):
-    posts = db.query(Post).offset(skip).limit(limit).all()
+    # Query posts with author information and no limit
+    posts = db.query(Post).join(User, Post.author_id == User.id).all()
     return posts
 
 @router.get("/{post_id}", response_model=PostSchema)

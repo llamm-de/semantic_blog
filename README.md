@@ -38,4 +38,18 @@ To use the API, you can use the following endpoints:
 
 ## Frontend
 
-TBC
+To start the frontend:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+The frontend will be available at http://localhost:3000
+
+Features:
+- User registration and login
+- View all blog posts
+- Create, edit, and delete your own posts
+- Search posts using semantic search

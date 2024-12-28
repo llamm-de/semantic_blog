@@ -3,6 +3,7 @@ from typing import Optional
 from datetime import datetime
 import re
 from html.parser import HTMLParser
+from app.schemas.user import User
 
 class HTMLStripper(HTMLParser):
     def __init__(self):
@@ -69,6 +70,7 @@ class PostInDB(PostBase):
     vector_id: str
     created_at: datetime
     updated_at: Optional[datetime] = None
+    author: Optional[User] = None
 
     class Config:
         from_attributes = True
