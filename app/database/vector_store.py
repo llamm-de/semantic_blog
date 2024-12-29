@@ -23,6 +23,11 @@ class ChromaDBManager:
             query_texts=[query],
             n_results=limit
         )
+        
+        # Add default distances if not provided by the API
+        #if "distances" not in results:
+        results["distances"] = [[1 - (i/limit) for i in range(len(results["ids"][0]))]]
+        
         return results
 
     def update_post(self, post_id: str, content: str, metadata: dict):

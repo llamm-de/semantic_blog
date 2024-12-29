@@ -125,7 +125,7 @@ def search_posts(
         if post:
             response.append({
                 "post": post,
-                "similarity_score": 1 - (i / len(results["ids"][0]))  # Simple ranking-based score
+                "similarity_score": float(results["distances"][0][i])  # Use actual distance from ChromaDB
             })
     
     return response 

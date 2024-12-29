@@ -32,7 +32,7 @@ export const deletePost = async (id) => {
 export const searchPosts = async (query) => {
   const response = await api.post('/posts/search', { 
     query,
-    limit: 5  // Request top 5 results
+    limit: 10  // Request top 5 results
   });
   return response.data;
 }; 

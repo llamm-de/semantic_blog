@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, VStack, Input, Button, Text, Heading, HStack, Badge } from '@chakra-ui/react';
+import { Box, VStack, Input, Button, Text, Heading, HStack, Badge, Alert, AlertIcon } from '@chakra-ui/react';
 import { getPosts, searchPosts } from '../../services/posts';
 import { useNavigate } from 'react-router-dom';
 
 function PostList() {
   const [posts, setPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,19 +16,20 @@ function PostList() {
   const loadPosts = async () => {
     const data = await getPosts();
     setPosts(data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+    setIsSearching(false);
   };
 
   const handleSearch = async () => {
     if (searchQuery.trim()) {
+      setIsSearching(true);
       const results = await searchPosts(searchQuery);
-      // Sort results by similarity score and take top 5
-      const sortedResults = results
+      const filteredResults = results
         .sort((a, b) => b.similarity_score - a.similarity_score)
-        .slice(0, 5);
-      setPosts(sortedResults.map(result => ({
-        ...result.post,
-        similarity_score: result.similarity_score
-      })));
+        .map(result => ({
+          ...result.post,
+          similarity_score: result.similarity_score
+        }));
+      setPosts(filteredResults);
     } else {
       loadPosts();
     }
@@ -56,8 +58,10 @@ function PostList() {
           <Badge colorScheme="blue">By {post.author?.username || 'Unknown'}</Badge>
           <Text fontSize="sm" color="gray.500">{createdAt}</Text>
           {post.similarity_score !== undefined && (
-            <Badge colorScheme="green">
-              {(post.similarity_score * 100).toFixed(1)}% match
+            <Badge colorScheme={post.similarity_score >= 0.75 ? 'green' : 
+                              post.similarity_score >= 0.5 ? 'yellow' : 
+                              post.similarity_score >= 0.25 ? 'orange' : 'red'}>
+              {(post.similarity_score*100).toFixed(2)} % relevant
             </Badge>
           )}
         </HStack>
@@ -77,7 +81,14 @@ function PostList() {
         <Button onClick={handleSearch}>Search</Button>
       </Box>
       <VStack spacing={4} align="stretch">
-        {posts.map(renderPostPreview)}
+        {isSearching && posts.length === 0 ? (
+          <Alert status="info">
+            <AlertIcon />
+            No similar posts found
+          </Alert>
+        ) : (
+          posts.map(renderPostPreview)
+        )}
       </VStack>
     </Box>
   );
